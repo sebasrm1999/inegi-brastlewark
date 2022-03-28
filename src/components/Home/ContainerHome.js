@@ -1,11 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import Home from "./Home";
+import { addGnomes } from "./state/homeActions";
 
-function mapStateToProps(state) {
+function mapStateToProps(store) {
   return {
-    jugadores: state.jugadores,
+    allGnomes: store.get("gnomes"),
   };
 }
+
+const mapDispatchToProps = {
+  addGnomes,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import Appstore from "./src/store";
 import Home from "./src/components/Home";
@@ -16,10 +17,14 @@ export default function App() {
             headerStyle: {
               backgroundColor: "#002674",
             },
-            headerTintColor: "#067d26",
+            headerTintColor: "#FFF",
           }}
         >
-          <Stack.Screen name="Home" component={Home} options={{ title: "" }} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ title: "Gnomebook" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

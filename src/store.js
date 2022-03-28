@@ -1,13 +1,9 @@
-import { createStore } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import gnomes from "./components/Home/state/homeReducer";
 
-const initialState = {
-  jugadores: [],
-  titulares: [],
-  suplentes: [],
-};
+const rootReducer = combineReducers({
+  gnomes,
+});
 
-function reducerTrainer(state = initialState, action) {
-  return state;
-}
-
-export default createStore(reducerTrainer);
+export default createStore(gnomes, applyMiddleware(thunk));
