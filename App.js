@@ -5,6 +5,7 @@ import "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import Appstore from "./src/store";
 import Home from "./src/components/Home";
+import GnomeDetails from "./src/components/GnomeDetails";
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,7 @@ export default function App() {
         <Stack.Navigator
           screenOptions={{
             headerStyle: {
-              backgroundColor: "#002674",
+              backgroundColor: "#224de3",
             },
             headerTintColor: "#FFF",
           }}
@@ -24,6 +25,11 @@ export default function App() {
             name="Home"
             component={Home}
             options={{ title: "Gnomebook" }}
+          />
+          <Stack.Screen
+            name="GnomeDetails"
+            component={GnomeDetails}
+            options={{ title: "" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

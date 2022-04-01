@@ -1,13 +1,36 @@
 import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
 
 function Gnome({ navigation, gnome }) {
+  function toDetails() {
+    navigation.navigate("GnomeDetails", { gnome: gnome });
+  }
+
   return (
-    <View style={styles.box}>
-      <Image />
-      <Text>{gnome.name}</Text>
-    </View>
+    <TouchableOpacity onPress={toDetails}>
+      <View style={styles.box}>
+        <Image
+          style={styles.image}
+          source={{
+            uri: gnome.thumbnail,
+          }}
+        />
+        <View
+          style={{
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100%",
+            justifyContent: "space-around",
+          }}
+        >
+          <Text style={{ color: "#FFF", fontSize: 20, fontWeight: "bold" }}>
+            {gnome.name}
+          </Text>
+          <Text style={{ color: "#FFF" }}>{gnome.age} years old</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -22,12 +45,20 @@ Gnome.propTypes = {
 const styles = StyleSheet.create({
   box: {
     margin: 10,
-    backgroundColor: "#EDC9AF",
+    backgroundColor: "#224de3",
+    borderWidth: 1,
+    borderColor: "#ff0000",
     borderRadius: 5,
     padding: 10,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    height: 125,
+  },
+  image: {
+    height: 100,
+    width: 100,
+    resizeMode: "cover",
   },
 });
 
