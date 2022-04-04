@@ -1,8 +1,11 @@
 import React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 function Gnome({ navigation, gnome }) {
+  const { t } = useTranslation("gnomes");
+
   function toDetails() {
     navigation.navigate("GnomeDetails", { gnome: gnome });
   }
@@ -27,7 +30,9 @@ function Gnome({ navigation, gnome }) {
           <Text style={{ color: "#FFF", fontSize: 20, fontWeight: "bold" }}>
             {gnome.name}
           </Text>
-          <Text style={{ color: "#FFF" }}>{gnome.age} years old</Text>
+          <Text style={{ color: "#FFF" }}>
+            {gnome.age} {t("Age")}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>

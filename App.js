@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import Appstore from "./src/store";
+import "./i18n";
 import Home from "./src/components/Home";
 import GnomeDetails from "./src/components/GnomeDetails";
 
