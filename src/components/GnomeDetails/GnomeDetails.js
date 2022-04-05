@@ -42,7 +42,7 @@ function GnomeDetails({ navigation, route }) {
     getFriendsWithPhoto();
   }, [route.params.gnome]);
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View
         style={{
           flexDirection: "column",
@@ -83,6 +83,18 @@ function GnomeDetails({ navigation, route }) {
         <Text style={{ fontSize: 26, fontWeight: "bold", marginTop: 10 }}>
           {gnome.name}
         </Text>
+        <View
+          style={{
+            flexDirection: "column",
+            alignItems: "center",
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+            {t("Details-hair")}
+          </Text>
+          <Text>{t(`${gnome.hair_color.toLowerCase()}`)}</Text>
+        </View>
         <View
           style={{
             flexDirection: "row",
@@ -147,7 +159,6 @@ function GnomeDetails({ navigation, route }) {
                     margin: 5,
                     flexDirection: "row",
                     width: 105,
-                    height: 40,
                   }}
                 >
                   <FontAwesome5
@@ -171,7 +182,7 @@ function GnomeDetails({ navigation, route }) {
         <Text style={{ fontSize: 22, fontWeight: "bold", marginTop: 5 }}>
           {t("Details-friends")}
         </Text>
-        <ScrollView style={{ height: 250 }}>
+        <ScrollView style={{ height: 180 }}>
           {friendsWithPhoto.length > 0 ? (
             friendsWithPhoto.map((friend) => (
               <Gnome key={friend.id} gnome={friend} navigation={navigation} />
