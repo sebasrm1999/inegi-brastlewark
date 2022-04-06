@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
   Text,
   View,
-  Image,
   TouchableOpacity,
   TextInput,
-  Button,
   FlatList,
   ActivityIndicator,
 } from "react-native";
@@ -18,6 +15,9 @@ import Modal from "react-native-modal";
 import { Formik } from "formik";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import { homeStyles } from "../../utils/styles";
+import { professions, hairColors } from "../../constants/gnomesData";
+import CheckboxGroup from "../CheckboxGroup";
 
 function Home({ allGnomes, addGnomes, navigation }) {
   const { t, i18n } = useTranslation("home");
@@ -26,6 +26,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
   const [modalType, setModalType] = useState("");
   const [gnomesDisplayedLimit, setGnomesDisplayedLimit] = useState(0);
   const [gnomesDisplayed, setGnomesDisplayed] = useState([]);
+  const [gnomes, setGnomes] = useState([]);
   const [initialFilters, setInitialFilters] = useState({
     minAge: "0",
     maxAge: "1000",
@@ -33,107 +34,10 @@ function Home({ allGnomes, addGnomes, navigation }) {
     hairColor: [],
     friendsNumber: "",
   });
-  const [checkboxesProfessions, setCheckboxesProfessions] = useState([
-    {
-      id: 1,
-      profession: t("metalworker"),
-    },
-    {
-      id: 2,
-      profession: t("woodcarver"),
-    },
-    {
-      id: 3,
-      profession: t("stonecarver"),
-    },
-    {
-      id: 4,
-      profession: t("tinker"),
-    },
-    {
-      id: 5,
-      profession: t("tailor"),
-    },
-    {
-      id: 6,
-      profession: t("potter"),
-    },
-    {
-      id: 7,
-      profession: t("brewer"),
-    },
-    {
-      id: 8,
-      profession: t("medic"),
-    },
-    {
-      id: 9,
-      profession: t("prospector"),
-    },
-    {
-      id: 10,
-      profession: t("gemcutter"),
-    },
-    {
-      id: 11,
-      profession: t("mason"),
-    },
-    {
-      id: 12,
-      profession: t("cook"),
-    },
-    {
-      id: 13,
-      profession: t("baker"),
-    },
-    {
-      id: 14,
-      profession: t("miner"),
-    },
-    {
-      id: 15,
-      profession: t("carpenter"),
-    },
-    {
-      id: 16,
-      profession: t("farmer"),
-    },
-    {
-      id: 17,
-      profession: t("tax inspector"),
-    },
-    {
-      id: 18,
-      profession: t("smelter"),
-    },
-  ]);
-  const [checkboxesHair, setCheckboxesHair] = useState([
-    {
-      id: 1,
-      hair: t("pink"),
-      color: "#ff45e0",
-    },
-    {
-      id: 2,
-      hair: t("red"),
-      color: "#ff0000",
-    },
-    {
-      id: 3,
-      hair: t("green"),
-      color: "#18cc00",
-    },
-    {
-      id: 4,
-      hair: t("gray"),
-      color: "#6e706e",
-    },
-    {
-      id: 5,
-      hair: t("black"),
-      color: "#000000",
-    },
-  ]);
+  const [checkboxesProfessions, setCheckboxesProfessions] = useState(
+    professions
+  );
+  const [checkboxesHair, setCheckboxesHair] = useState(hairColors);
 
   useEffect(() => {
     setGnomesDisplayedLimit(10);
@@ -143,8 +47,13 @@ function Home({ allGnomes, addGnomes, navigation }) {
   }, []);
 
   useEffect(() => {
-    setGnomesDisplayed(allGnomes.slice(0, gnomesDisplayedLimit));
-  }, [allGnomes, gnomesDisplayedLimit]);
+    if (gnomesDisplayed.length === 0) {
+      setGnomes(allGnomes);
+      setGnomesDisplayed(allGnomes.slice(0, 10));
+    } else {
+      setGnomesDisplayed(gnomes.slice(0, gnomesDisplayedLimit));
+    }
+  }, [allGnomes, gnomesDisplayedLimit, gnomes]);
 
   function toggleCheckbox(value, setFieldValue, arrayFilter, name) {
     console.log(value);
@@ -187,7 +96,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
       (gnome) =>
         gnome.age >= filtersObj.minAge && gnome.age <= filtersObj.maxAge
     );
-    setGnomesDisplayed(filterArray);
+    setGnomes(filterArray);
   }
 
   function handleLoadMore() {
@@ -208,26 +117,10 @@ function Home({ allGnomes, addGnomes, navigation }) {
           isVisible={showModal}
           onBackdropPress={() => setShowModal(false)}
         >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "flex-end",
-              marginTop: 22,
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: "white",
-                paddingVertical: 20,
-                alignItems: "center",
-              }}
-            >
+          <View style={homeStyles.modalContainer}>
+            <View style={homeStyles.modalBg}>
               <TouchableOpacity
-                style={{
-                  width: "100%",
-                  marginVertical: 10,
-                  alignItems: "center",
-                }}
+                style={homeStyles.modalLngButtons}
                 onPress={() => {
                   i18n.changeLanguage("en");
                   setShowModal(false);
@@ -236,11 +129,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
                 <Text style={{ fontSize: 18 }}>English</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{
-                  width: "100%",
-                  marginVertical: 10,
-                  alignItems: "center",
-                }}
+                style={homeStyles.modalLngButtons}
                 onPress={() => {
                   i18n.changeLanguage("es-MX");
                   setShowModal(false);
@@ -259,13 +148,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
           isVisible={showModal}
           onBackdropPress={() => setShowModal(false)}
         >
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "flex-end",
-              marginTop: 22,
-            }}
-          >
+          <View style={homeStyles.modalContainer}>
             <View
               style={{
                 backgroundColor: "white",
@@ -285,13 +168,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
                   values,
                 }) => (
                   <View>
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 18,
-                        marginBottom: 5,
-                      }}
-                    >
+                    <Text style={homeStyles.modalSubtitle}>
                       {t("Details-age")}
                     </Text>
                     <View
@@ -308,14 +185,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
                         keyboardType="numeric"
                         placeholder="Min."
                         maxLength={4}
-                        style={{
-                          borderRadius: 15,
-                          borderWidth: 1,
-                          borderColor: "#224de3",
-                          paddingVertical: 15,
-                          paddingLeft: 5,
-                          width: "40%",
-                        }}
+                        style={homeStyles.modalAgeInputs}
                       />
                       <TextInput
                         onChangeText={handleChange("maxAge")}
@@ -324,176 +194,45 @@ function Home({ allGnomes, addGnomes, navigation }) {
                         keyboardType="numeric"
                         placeholder="Max."
                         maxLength={4}
-                        style={{
-                          borderRadius: 15,
-                          borderWidth: 1,
-                          borderColor: "#224de3",
-                          paddingVertical: 15,
-                          paddingLeft: 5,
-                          width: "40%",
-                        }}
+                        style={homeStyles.modalAgeInputs}
                       />
                     </View>
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 18,
-                        margin: 5,
+                    <CheckboxGroup
+                      label={t("Details-professions")}
+                      labelStyle={homeStyles.modalSubtitle}
+                      contentContainerStyle={homeStyles.flatlistContainer}
+                      flatlistViewContainer={homeStyles.flatlistViewContainer}
+                      checkboxStyle={homeStyles.checkBox}
+                      checkboxTextStyle={{
+                        fontSize: 14,
+                        flex: 1,
+                        flexShrink: 1,
                       }}
-                    >
-                      {t("Details-professions")}
-                    </Text>
-                    <FlatList
-                      contentContainerStyle={{
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                      numColumns={3}
                       data={checkboxesProfessions}
-                      keyExtractor={(item, index) => index.toString()}
-                      renderItem={(profession) => (
-                        <View
-                          style={{
-                            margin: 5,
-                            flexDirection: "row",
-                            width: 105,
-                          }}
-                        >
-                          <TouchableOpacity
-                            onPress={() =>
-                              toggleCheckbox(
-                                profession.item.profession,
-                                setFieldValue,
-                                values.professions,
-                                "professions"
-                              )
-                            }
-                          >
-                            <View
-                              style={{
-                                width: 20,
-                                height: 20,
-                                alignItems: "center",
-                                borderColor: "#224de3",
-                                borderWidth: 0.5,
-                                borderRadius: 5,
-                                marginRight: 2,
-                                backgroundColor: `${
-                                  values.professions.includes(
-                                    profession.item.profession
-                                  )
-                                    ? "#224de3"
-                                    : "#FFF"
-                                }`,
-                              }}
-                            >
-                              <FontAwesome5
-                                name="check"
-                                size={15}
-                                color="#FFF"
-                              />
-                            </View>
-                          </TouchableOpacity>
-                          <Text
-                            style={{ fontSize: 14, flex: 1, flexShrink: 1 }}
-                          >
-                            {t(`${profession.item.profession.toLowerCase()}`)}
-                          </Text>
-                        </View>
-                      )}
+                      setFieldValue={setFieldValue}
+                      toggleCheckbox={toggleCheckbox}
+                      groupName="professions"
+                      itemName="profession"
+                      values={values}
                     />
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 18,
-                        margin: 5,
-                      }}
-                    >
-                      {t("Details-hair")}
-                    </Text>
-                    <FlatList
-                      contentContainerStyle={{
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                      numColumns={3}
+                    <CheckboxGroup
+                      label={t("Details-hair")}
+                      labelStyle={homeStyles.modalSubtitle}
+                      contentContainerStyle={homeStyles.flatlistContainer}
+                      flatlistViewContainer={homeStyles.flatlistViewContainer}
+                      checkboxStyle={homeStyles.checkBox}
+                      checkboxTextStyle={homeStyles.colorPill}
                       data={checkboxesHair}
-                      keyExtractor={(item, index) => index.toString()}
-                      renderItem={(hair) => (
-                        <View
-                          style={{
-                            margin: 5,
-                            flexDirection: "row",
-                            width: 105,
-                          }}
-                        >
-                          <TouchableOpacity
-                            onPress={() =>
-                              toggleCheckbox(
-                                hair.item.hair,
-                                setFieldValue,
-                                values.hairColor,
-                                "hairColor"
-                              )
-                            }
-                          >
-                            <View
-                              style={{
-                                width: 20,
-                                height: 20,
-                                alignItems: "center",
-                                borderColor: "#224de3",
-                                borderWidth: 0.5,
-                                borderRadius: 5,
-                                marginRight: 15,
-                                backgroundColor: `${
-                                  values.hairColor.includes(hair.item.hair)
-                                    ? "#224de3"
-                                    : "#FFF"
-                                }`,
-                              }}
-                            >
-                              <FontAwesome5
-                                name="check"
-                                size={15}
-                                color="#FFF"
-                              />
-                            </View>
-                          </TouchableOpacity>
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              flex: 1,
-                              backgroundColor: hair.item.color,
-                              fontWeight: "bold",
-                              color: "#FFF",
-                              textAlign: "center",
-                              borderRadius: 10,
-                              marginVertical: 2,
-                            }}
-                          >
-                            {t(`${hair.item.hair.toLowerCase()}`)}
-                          </Text>
-                        </View>
-                      )}
+                      setFieldValue={setFieldValue}
+                      toggleCheckbox={toggleCheckbox}
+                      groupName="hairColor"
+                      itemName="hair"
+                      values={values}
                     />
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: 18,
-                        margin: 5,
-                      }}
-                    >
+                    <Text style={homeStyles.modalSubtitle}>
                       {t("Details-friends")}
                     </Text>
-                    <View
-                      style={{
-                        borderColor: "#224de3",
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        marginVertical: 5,
-                      }}
-                    >
+                    <View style={homeStyles.modalSelect}>
                       <Picker
                         selectedValue={values.friendsNumber}
                         onValueChange={(itemValue, itemIndex) =>
@@ -511,18 +250,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
                     </View>
 
                     <TouchableOpacity onPress={handleSubmit}>
-                      <Text
-                        style={{
-                          backgroundColor: "#224de3",
-                          textAlign: "center",
-                          color: "#FFF",
-                          padding: 10,
-                          borderRadius: 10,
-                          marginVertical: 5,
-                          fontSize: 18,
-                          fontWeight: "bold",
-                        }}
-                      >
+                      <Text style={homeStyles.submitButton}>
                         {t("Confirm")}
                       </Text>
                     </TouchableOpacity>
@@ -547,46 +275,24 @@ function Home({ allGnomes, addGnomes, navigation }) {
   return (
     <View style={{ flex: 1 }}>
       {showModal && <CustomModal />}
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 10,
-          marginHorizontal: 25,
-          paddingTop: 15,
-        }}
-      >
+      <View style={homeStyles.topButtonsContainer}>
         <TouchableOpacity
-          style={{
-            borderColor: "#224de3",
-            borderWidth: 1,
-            borderRadius: 15,
-            padding: 5,
-            paddingBottom: 8,
-          }}
+          style={homeStyles.topButtons}
           onPress={() => {
             setShowModal(true);
             setModalType("language");
           }}
         >
-          <Text style={{ fontSize: 18, color: "#224de3" }}>
-            {t("Change-lng")}
-          </Text>
+          <Text style={homeStyles.topButtonText}>{t("Change-lng")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            borderColor: "#224de3",
-            borderWidth: 1,
-            borderRadius: 15,
-            padding: 5,
-            paddingBottom: 8,
-          }}
+          style={homeStyles.topButtons}
           onPress={() => {
             setShowModal(true);
             setModalType("filters");
           }}
         >
-          <Text style={{ fontSize: 18, color: "#224de3" }}>{t("Filters")}</Text>
+          <Text style={homeStyles.topButtonText}>{t("Filters")}</Text>
         </TouchableOpacity>
       </View>
       {gnomesDisplayed.length > 0 ? (

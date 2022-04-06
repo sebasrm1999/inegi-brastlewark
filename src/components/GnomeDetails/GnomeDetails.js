@@ -4,6 +4,7 @@ import {
   Image,
   ImageBackground,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -14,6 +15,7 @@ import FastImage from "react-native-fast-image";
 import { FontAwesome5 } from "@expo/vector-icons";
 import data from "../../data.json";
 import Gnome from "../Gnome";
+import { detailsStyle } from "../../utils/styles";
 
 function GnomeDetails({ navigation, route }) {
   const [friendsWithPhoto, setFriendsWithPhoto] = useState([]);
@@ -43,38 +45,18 @@ function GnomeDetails({ navigation, route }) {
   }, [route.params.gnome]);
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flexDirection: "column",
-          width: "100%",
-          alignItems: "center",
-          marginBottom: 40,
-        }}
-      >
+      <View style={detailsStyle.container}>
         <ImageBackground
           source={image}
           resizeMode="cover"
-          style={{
-            width: "100%",
-            height: 200,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={detailsStyle.imageBg}
         >
           <TouchableOpacity>
-            <View
-              style={{
-                width: 150,
-                height: 150,
-                borderRadius: 75,
-                backgroundColor: "grey",
-                borderColor: "#224de3",
-                borderWidth: 1,
-              }}
-            >
+            <View style={detailsStyle.imgContainer}>
               <Image
                 source={gnomeImage}
-                style={{ width: 150, height: 150, resizeMode: "cover" }}
+                resizeMode="cover"
+                style={detailsStyle.img}
               />
             </View>
           </TouchableOpacity>
@@ -95,14 +77,7 @@ function GnomeDetails({ navigation, route }) {
           </Text>
           <Text>{t(`${gnome.hair_color.toLowerCase()}`)}</Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            justifyContent: "space-around",
-            marginVertical: 10,
-          }}
-        >
+        <View style={detailsStyle.containerRow}>
           <View style={{ flexDirection: "row" }}>
             <FontAwesome5
               style={{ paddingRight: 10 }}
@@ -110,7 +85,7 @@ function GnomeDetails({ navigation, route }) {
               size={30}
               color="#224de3"
             />
-            <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <View style={detailsStyle.containerColumn}>
               <Text>{t("Details-age")}</Text>
               <Text>{gnome.age}</Text>
             </View>
@@ -122,7 +97,7 @@ function GnomeDetails({ navigation, route }) {
               size={30}
               color="#224de3"
             />
-            <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <View style={detailsStyle.containerColumn}>
               <Text>{t("Details-height")}</Text>
               <Text>{gnome.height}</Text>
             </View>
@@ -134,15 +109,13 @@ function GnomeDetails({ navigation, route }) {
               size={30}
               color="#224de3"
             />
-            <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <View style={detailsStyle.containerColumn}>
               <Text>{t("Details-weight")}</Text>
               <Text>{gnome.weight}</Text>
             </View>
           </View>
         </View>
-        <Text style={{ fontSize: 22, fontWeight: "bold", marginTop: 10 }}>
-          {t("Details-professions")}
-        </Text>
+        <Text style={detailsStyle.subtitle}>{t("Details-professions")}</Text>
         <View style={{ width: "90%", marginHorizontal: 20 }}>
           {gnome.professions.length > 0 ? (
             <FlatList
@@ -179,9 +152,7 @@ function GnomeDetails({ navigation, route }) {
             </View>
           )}
         </View>
-        <Text style={{ fontSize: 22, fontWeight: "bold", marginTop: 5 }}>
-          {t("Details-friends")}
-        </Text>
+        <Text style={detailsStyle.subtitle}>{t("Details-friends")}</Text>
         <ScrollView style={{ height: 180 }}>
           {friendsWithPhoto.length > 0 ? (
             friendsWithPhoto.map((friend) => (
