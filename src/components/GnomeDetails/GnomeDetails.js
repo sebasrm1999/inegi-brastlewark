@@ -16,6 +16,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import data from "../../data.json";
 import Gnome from "../Gnome";
 import { detailsStyle } from "../../utils/styles";
+import loaderGif from "../../../assets/loader.gif";
 
 function GnomeDetails({ navigation, route }) {
   const [friendsWithPhoto, setFriendsWithPhoto] = useState([]);

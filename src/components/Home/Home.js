@@ -6,6 +6,7 @@ import {
   TextInput,
   FlatList,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import PropTypes from "prop-types";
 import Gnome from "../Gnome";
@@ -18,6 +19,7 @@ import { Picker } from "@react-native-picker/picker";
 import { homeStyles } from "../../utils/styles";
 import { professions, hairColors } from "../../constants/gnomesData";
 import CheckboxGroup from "../CheckboxGroup";
+import loaderGif from "../../../assets/loader.gif";
 
 function Home({ allGnomes, addGnomes, navigation }) {
   const { t, i18n } = useTranslation("home");
@@ -42,7 +44,9 @@ function Home({ allGnomes, addGnomes, navigation }) {
   useEffect(() => {
     setGnomesDisplayedLimit(10);
     if (allGnomes.length === 0) {
-      addGnomes(data.Brastlewark);
+      setTimeout(() => {
+        addGnomes(data.Brastlewark);
+      }, 2000);
     }
   }, []);
 
@@ -267,7 +271,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
   function RenderFooter() {
     return isLoading ? (
       <View style={{ marginVertical: 10, alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#224de3" />
+        <Image source={loaderGif} style={{ height: 150, width: 150 }} />
       </View>
     ) : null;
   }
@@ -275,6 +279,7 @@ function Home({ allGnomes, addGnomes, navigation }) {
   return (
     <View style={{ flex: 1 }}>
       {showModal && <CustomModal />}
+
       <View style={homeStyles.topButtonsContainer}>
         <TouchableOpacity
           style={homeStyles.topButtons}
@@ -311,7 +316,16 @@ function Home({ allGnomes, addGnomes, navigation }) {
           ListFooterComponent={RenderFooter}
         />
       ) : (
-        <View></View>
+        <View
+          style={{
+            flex: 1,
+            marginVertical: 10,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image source={loaderGif} style={{ height: 150, width: 150 }} />
+        </View>
       )}
     </View>
   );
